@@ -9,13 +9,11 @@ body {
   font-family: "Montserrat", sans-serif;
   margin: 0 auto;
   color: #3e3e3e;
-  /* background: url(./../public/images/bg.jpeg); */
   background: linear-gradient(to right, #ff7e5f, #feb47b);
 }
 
 .sidebar {
   width: 350px;
-  /* background-color: #3e3e3e; */
   background: linear-gradient(to right, #feb47b, #ff7e5f);
   height: 100vh;
 }
