@@ -54,13 +54,14 @@ input {
   background-color: white;
 }
 .btn {
-  margin-top: 1rem;
   background: linear-gradient(to right,#feb47b, #ff7e5f, #feb47b);
   color: white;
   font-weight: 700;
   transform: all 0.5s ease;
   transition: all 0.5s ease;
   border: none;
+  border-radius: 5px;
+  padding: 1rem;
 }
 .btn:hover {
   background: linear-gradient(to right, #ff7e5f, #ff7e5f);
@@ -90,4 +91,33 @@ input {
   height: 90vh;
   gap: 3rem;
   padding: 2rem;
+}
+.form-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.add-form{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.head{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.pad{
+  display: flex;
+  flex-direction: column;
+}
+.task{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff70;
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
 }
