@@ -1,19 +1,61 @@
-import React from "react";
-
-import "@fortawesome/fontawesome-svg-core/styles.css";
-import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false;
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function Todolist() {
-  const getTodos = async () => {};
+  const [isShowInput, setIsShowInput] = useState(false);
+  const [todoTitle, setTodoTitle] = useState("");
+  const [userTodos, setUserTodos] = useState([]);
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+  const getTodos = async () => {
+    try {
+      const response = await fetch("/api/todos");
+      if (response.ok) {
+        const data = await response.json();
+        setUserTodos(data.data);
+      } else {
+        console.error("Failed to fetch todos");
+      }
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  };
 
   const removeTodo = async () => {};
 
   const signOut = async () => {};
 
-  const addTodo = async () => {};
+  const addTodo = async () => {
+    if (todoTitle.trim()) {
+      try {
+        const response = await fetch("/api/todos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: todoTitle,
+            desc: "",
+            isComplete: false,
+          }),
+        });
+
+        if (response.ok) {
+          setTodoTitle("");
+          setIsShowInput(false);
+          toast.success("Todo added successfully!");
+          getTodos();
+        } else {
+          console.error("Failed to add todo");
+        }
+      } catch (error) {
+        console.error("Error adding todo:", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -26,26 +68,26 @@ function Todolist() {
       <div className="container">
         <div
           className="form-container"
-          // style={{ display: `${isShowInput ? "block" : "none"}` }}
+          style={{ display: `${isShowInput ? "block" : "none"}` }}
         >
           <div className="add-form">
             <input
               id="input"
               type="text"
               placeholder="Type your To-Do works..."
+              value={todoTitle}
+              onChange={(e) => setTodoTitle(e.target.value)}
             />
-            <button type="submit" id="submit">
+            <button type="submit" id="submit" onClick={addTodo}>
               ADD
             </button>
           </div>
         </div>
         <div className="head">
           <div className="date">
-            <p>
-              first name  ---- last name
-            </p>
+            <p>first name ---- last name</p>
           </div>
-          <div className="add">
+          <div className="add" onClick={() => setIsShowInput(true)}>
             <svg
               width="2rem"
               height="2rem"
@@ -69,17 +111,23 @@ function Todolist() {
         <div className="pad">
           <div id="todo">
             <ul id="tasksContainer">
-              <li>
-                <span className="mark">
-                  <input type="checkbox" className="checkbox" />
-                </span>
-                <div className="list">
-                  <p>title</p>
-                </div>
-                <span className="delete">
-                  <FontAwesomeIcon icon={faTrash} />
-                </span>
-              </li>
+              {userTodos.length > 0 ? (
+                userTodos.map((todo) => (
+                  <li key={todo._id}>
+                    <span className="mark">
+                      <input type="checkbox" className="checkbox" />
+                    </span>
+                    <div className="list">
+                      <p>{todo.title}</p>
+                    </div>
+                    <span className="delete">
+                      <FaTrash />
+                    </span>
+                  </li>
+                ))
+              ) : (
+                <p>No todos available</p>
+              )}
             </ul>
           </div>
         </div>
