@@ -55,6 +55,14 @@ function Index() {
                 </Link>
               </li>
               <li>
+                <Link href="/todos" className="iconWrapper">
+                  <span>
+                    <MdSpaceDashboard />
+                  </span>
+                  Todos
+                </Link>
+              </li>
+              <li>
                 <Link href="#" className="iconWrapper" onClick={signOut}>
                   <span>
                     <IoIosLogOut />

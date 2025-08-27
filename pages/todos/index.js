@@ -1,9 +1,9 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 
-function index() {
-  const [isShowInput, setIsShowInput] = useState(false);
+function Index() {
   const [todoTitle, setTodoTitle] = useState("");
   const [userTodos, setUserTodos] = useState([]);
 
@@ -43,9 +43,12 @@ function index() {
     }
   };
 
-  const signOut = async () => {};
-
   const addTodo = async () => {
+    if (!todoTitle.trim()) {
+      toast.error("Please enter a task before adding.");
+      return;
+    }
+
     const response = await fetch("/api/todos", {
       method: "POST",
       headers: {
@@ -67,21 +70,41 @@ function index() {
     }
   };
 
+  const changeIsComplete = async (id) => {
+    const todo = userTodos.find((t) => t._id === id);
+    const updatedTodo = { id: todo._id, isComplete: !todo.isComplete };
+
+    const response = await fetch("/api/todos", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTodo),
+    });
+
+    if (response.ok) {
+      toast.success("Todo updated!");
+      getTodos();
+    } else {
+      console.error("Failed to update todo");
+    }
+  };
+
   return (
     <>
-      <h1>Next-Todos</h1>
-
       <div className="alert">
-        <p> Please add a task !</p>
+        <div>
+          <h1>Next-Todos</h1> Please add a task !
+        </div>
+        <Link className="btn" href="/">
+          Home
+        </Link>
       </div>
 
       <div className="container">
         <ToastContainer />
         <div className="wrapper">
-          <div
-            className="form-container"
-            style={{ display: `${isShowInput ? "block" : "none"}` }}
-          >
+          <div className="form-container">
             <div className="add-form">
               <input
                 id="input"
@@ -101,24 +124,7 @@ function index() {
             </div>
           </div>
           <div className="head">
-            <div className="add" onClick={() => setIsShowInput(true)}>
-              <svg
-                width="2rem"
-                height="2rem"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                />
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                />
-              </svg>
-            </div>
-            <div className="time">Logout</div>
+            <div>Todo List</div>
           </div>
           <div className="pad">
             <div id="todo">
@@ -127,13 +133,19 @@ function index() {
                   userTodos.map((todo) => (
                     <li key={todo._id} className="task">
                       <span className="mark">
-                        <input type="checkbox" className="checkbox" />
+                        <input
+                          type="checkbox"
+                          className="checkbox"
+                          checked={todo.isComplete}
+                          value={todo.isComplete}
+                          onChange={() => changeIsComplete(todo._id)}
+                        />
                       </span>
                       <div className="list">
                         <p>{todo.title}</p>
                       </div>
                       <span
-                        className="delete"
+                        className="delete btn"
                         onClick={() => removeTodo(todo._id)}
                       >
                         <FaTrash />
@@ -152,4 +164,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;

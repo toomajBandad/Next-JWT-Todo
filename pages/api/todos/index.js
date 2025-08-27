@@ -55,6 +55,16 @@ const handler = async (req, res) => {
         .status(500)
         .json({ message: "UnKnown Internal Server Erorr !!" });
     }
+  } else if (req.method === "PUT") {
+    try {
+      const { id, isComplete } = req.body;
+      await TodoModel.findByIdAndUpdate(id, { isComplete });
+      res.status(200).json({ message: "Item Updated successfully!" });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "UnKnown Internal Server Erorr !!" });
+    }
   } else {
     res.status(405).json({ message: "Method Not Allowed" });
   }
