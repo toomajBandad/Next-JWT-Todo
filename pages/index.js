@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { MdSpaceDashboard } from "react-icons/md";
-import { IoIosLogIn } from "react-icons/io";
-import { IoIosLogOut } from "react-icons/io";
-import { FaRegistered } from "react-icons/fa";
-import { FaSolarPanel } from "react-icons/fa";
+import { IoIosLogIn,IoIosLogOut } from "react-icons/io";
+import { FaSolarPanel ,FaRegistered} from "react-icons/fa";
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -18,6 +18,7 @@ const handler = async (req, res) => {
 
   const user = await UserModel.findOne({ email: tokenPayload.email });
 
+  //Get all todos
   if (req.method === "GET") {
     try {
       const todos = await TodoModel.find({ owner: user._id });
@@ -27,6 +28,8 @@ const handler = async (req, res) => {
         .status(500)
         .json({ message: "UnKnown Internal Server Erorr !!" });
     }
+
+    //Create a new todo
   } else if (req.method === "POST") {
     try {
       const { title, desc, isComplete } = req.body;
@@ -45,6 +48,8 @@ const handler = async (req, res) => {
         .status(500)
         .json({ message: "UnKnown Internal Server Erorr !!" });
     }
+
+    //Delete a todo
   } else if (req.method === "DELETE") {
     try {
       const { id } = req.body;
@@ -55,6 +60,8 @@ const handler = async (req, res) => {
         .status(500)
         .json({ message: "UnKnown Internal Server Erorr !!" });
     }
+
+    //Change atodo status
   } else if (req.method === "PUT") {
     try {
       const { id, isComplete } = req.body;
