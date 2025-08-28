@@ -2,8 +2,12 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
+import connectToDB from "@/configs/db";
+import UserModel from "@/models/User";
+import { verifyToken } from "@/utils/auth";
+import TodoModel from "@/models/Todo";
 
-function Index() {
+function Index({ user, todos }) {
   const [todoTitle, setTodoTitle] = useState("");
   const [userTodos, setUserTodos] = useState([]);
 
@@ -95,7 +99,9 @@ function Index() {
       <ToastContainer />
       <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl p-8 space-y-8 animate-fade-in">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-amber-600">📝 Next-Todos</h1>
+          <h1 className="text-3xl font-bold text-amber-600">
+            📝 {user.firstname} {user.lastname} Todos List
+          </h1>
           <Link
             href="/"
             className="text-sm text-amber-500 hover:underline font-medium"
@@ -103,7 +109,7 @@ function Index() {
             Home
           </Link>
         </div>
-        <p className="text-gray-600">Please add a task!</p>
+        <p className="text-gray-600 text-2xl">Please add a task {user.firstname}!</p>
 
         <div className="flex gap-4">
           <input
@@ -163,6 +169,47 @@ function Index() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { token } = context.req.cookies;
+  connectToDB();
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
+
+  const tokenPayload = verifyToken(token);
+
+  if (!tokenPayload) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
+
+  const user = await UserModel.findOne(
+    {
+      email: tokenPayload.email,
+    },
+    "-_id firstname lastname"
+  );
+
+  const todos = await TodoModel.find({
+    user: user._id,
+  });
+
+  return {
+    props: {
+      user: JSON.parse(JSON.stringify(user)),
+      todos: JSON.parse(JSON.stringify(todos)),
+    },
+  };
 }
 
 export default Index;

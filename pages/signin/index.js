@@ -35,7 +35,7 @@ function Index() {
       if (res.ok) {
         toast.success("User login successfully!");
         setTimeout(() => {
-          router.push("/todos");
+          router.push("/");
         }, 2000);
       } else {
         toast.error(result.message || "Something went wrong");
