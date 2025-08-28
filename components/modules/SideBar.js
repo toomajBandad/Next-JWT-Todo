@@ -63,6 +63,18 @@ export default function SideBar() {
                 Home
               </Link>
             </li>
+
+            {isAdmin && (
+              <li>
+                <Link
+                  href="/p-admin"
+                  className="flex items-center gap-3 text-lg font-semibold text-gray-700 hover:text-amber-500 transition"
+                >
+                  <FaSolarPanel className="text-2xl" />
+                  Admin Panel
+                </Link>
+              </li>
+            )}
             {isLoggedIn && (
               <>
                 <li>
@@ -116,18 +128,6 @@ export default function SideBar() {
                   </Link>
                 </li>
               </>
-            )}
-
-            {isAdmin && (
-              <li>
-                <Link
-                  href="/p-admin"
-                  className="flex items-center gap-3 text-lg font-semibold text-gray-700 hover:text-amber-500 transition"
-                >
-                  <FaSolarPanel className="text-2xl" />
-                  Admin Panel
-                </Link>
-              </li>
             )}
           </ul>
         </div>

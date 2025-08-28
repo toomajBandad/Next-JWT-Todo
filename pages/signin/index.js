@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "@/context/AuthContext";
 
 function Index() {
+  const { setIsLoggedIn, setIsAdmin } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -29,12 +32,15 @@ function Index() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(trimmedData),
       });
-
-      const result = await res.json();
-
+      const {user} = await res.json();
       if (res.ok) {
         toast.success("User login successfully!");
-        setTimeout(() => {
+        setTimeout(async () => {
+          setIsLoggedIn(true);
+
+          if (user.role === "ADMIN") {
+            setIsAdmin(true);
+          }
           router.push("/");
         }, 2000);
       } else {
