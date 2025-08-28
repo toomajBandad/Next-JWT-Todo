@@ -51,124 +51,81 @@ function Index() {
   };
 
   return (
-    <div className="container">
-      <ToastContainer />
-      <div className="wrapper">
-        <h1 align="center">SignUp Form</h1>
-        <form role="form" method="post" onSubmit={handleSubmit(signup)}>
-          <div className="inputBox">
-            <label htmlFor="firstname">Firstname:</label>
-            <input
-              id="firstname"
-              type="text"
-              autoComplete="off"
-              aria-invalid={errors.firstname ? "true" : "false"}
-              {...register("firstname", { required: "Firstname is required" })}
-              placeholder="Firstname"
-            />
-            {errors.firstname && (
-              <p className="error">{errors.firstname.message}</p>
-            )}
-          </div>
-
-          <div className="inputBox">
-            <label htmlFor="lastname">Lastname:</label>
-            <input
-              id="lastname"
-              type="text"
-              autoComplete="off"
-              aria-invalid={errors.lastname ? "true" : "false"}
-              {...register("lastname", { required: "Lastname is required" })}
-              placeholder="Lastname"
-            />
-            {errors.lastname && (
-              <p className="error">{errors.lastname.message}</p>
-            )}
-          </div>
-
-          <div className="inputBox">
-            <label htmlFor="username">Username:</label>
-            <input
-              id="username"
-              type="text"
-              autoComplete="off"
-              aria-invalid={errors.username ? "true" : "false"}
-              {...register("username", { required: "Username is required" })}
-              placeholder="Username"
-            />
-            {errors.username && (
-              <p className="error">{errors.username.message}</p>
-            )}
-          </div>
-
-          <div className="inputBox">
-            <label htmlFor="email">Email:</label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="off"
-              aria-invalid={errors.email ? "true" : "false"}
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Invalid email format",
-                },
-              })}
-              placeholder="Email"
-            />
-            {errors.email && <p className="error">{errors.email.message}</p>}
-          </div>
-
-          <div className="inputBox">
-            <label htmlFor="password">Password:</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="off"
-              aria-invalid={errors.password ? "true" : "false"}
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              placeholder="Password"
-            />
-            {errors.password && (
-              <p className="error">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div className="inputBox">
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              autoComplete="off"
-              aria-invalid={errors.confirmPassword ? "true" : "false"}
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-              })}
-              placeholder="Confirm Password"
-            />
-            {errors.confirmPassword && (
-              <p className="error">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-
+<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-yellow-100 to-amber-200 px-4 w-full">
+  <ToastContainer />
+  <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8 space-y-6 animate-fade-in">
+    <h1 className="text-3xl font-extrabold text-center text-amber-600">Create Your Account ✨</h1>
+    <form className="space-y-5" onSubmit={handleSubmit(signup)}>
+      {[
+        { id: "firstname", label: "First Name", type: "text", rules: { required: "Firstname is required" } },
+        { id: "lastname", label: "Last Name", type: "text", rules: { required: "Lastname is required" } },
+        { id: "username", label: "Username", type: "text", rules: { required: "Username is required" } },
+        {
+          id: "email",
+          label: "Email",
+          type: "email",
+          rules: {
+            required: "Email is required",
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "Invalid email format",
+            },
+          },
+        },
+        {
+          id: "password",
+          label: "Password",
+          type: "password",
+          rules: {
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          },
+        },
+        {
+          id: "confirmPassword",
+          label: "Confirm Password",
+          type: "password",
+          rules: {
+            required: "Please confirm your password",
+            validate: (value) =>
+              value === watch("password") || "Passwords do not match",
+          },
+        },
+      ].map(({ id, label, type, rules }) => (
+        <div key={id}>
+          <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>
           <input
-            type="submit"
-            className="register-btn btn"
-            value={loading ? "Signing Up..." : "Sign Up"}
-            disabled={loading}
+            id={id}
+            type={type}
+            autoComplete="off"
+            {...register(id, rules)}
+            className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+              errors[id] ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder={label}
           />
-        </form>
-      </div>
-    </div>
+          {errors[id] && <p className="mt-1 text-sm text-red-600">{errors[id].message}</p>}
+        </div>
+      ))}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className={`w-full py-2 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition duration-200 ${
+          loading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
+        {loading ? "Signing Up..." : "Sign Up"}
+      </button>
+    </form>
+    <p className="text-center text-sm text-gray-500">
+      Already have an account? <a href="/signin" className="text-amber-600 hover:underline">Sign In</a>
+    </p>
+  </div>
+</div>
   );
 }
 

@@ -31,6 +31,7 @@ function Index() {
       });
 
       const result = await res.json();
+
       if (res.ok) {
         toast.success("User login successfully!");
         setTimeout(() => {
@@ -47,18 +48,24 @@ function Index() {
   };
 
   return (
-    <div className="container">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-amber-100 to-yellow-200 px-4 w-full">
       <ToastContainer />
-      <div className="wrapper">
-        <h1 align="center">Login Form</h1>
-        <form role="form" method="post" onSubmit={handleSubmit(signIn)}>
-          <div className="inputBox">
-            <label htmlFor="email">Email:</label>
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6 animate-fade-in">
+        <h1 className="text-3xl font-extrabold text-center text-amber-600">
+          Welcome Back
+        </h1>
+        <form className="space-y-5" onSubmit={handleSubmit(signIn)}>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email address
+            </label>
             <input
               id="email"
               type="email"
               autoComplete="off"
-              aria-invalid={errors.email ? "true" : "false"}
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -66,18 +73,29 @@ function Index() {
                   message: "Invalid email format",
                 },
               })}
-              placeholder="Email"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="you@example.com"
             />
-            {errors.email && <p className="error">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
-          <div className="inputBox">
-            <label htmlFor="password">Password:</label>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <input
               id="password"
               type="password"
               autoComplete="off"
-              aria-invalid={errors.password ? "true" : "false"}
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -85,20 +103,34 @@ function Index() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              placeholder="Password"
+              className={`mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="••••••••"
             />
             {errors.password && (
-              <p className="error">{errors.password.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
-          <input
+          <button
             type="submit"
-            className="register-btn btn"
-            value={loading ? "Signing In..." : "Sign In"}
             disabled={loading}
-          />
+            className={`w-full py-2 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-md transition duration-200 ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {loading ? "Signing In..." : "Sign In"}
+          </button>
         </form>
+        <p className="text-center text-sm text-gray-500">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-amber-600 hover:underline">
+            Register
+          </a>
+        </p>
       </div>
     </div>
   );

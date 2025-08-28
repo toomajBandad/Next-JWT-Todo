@@ -91,76 +91,77 @@ function Index() {
   };
 
   return (
-    <>
-      <div className="alert">
-        <div>
-          <h1>Next-Todos</h1> Please add a task !
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 px-6 py-10 w-full">
+      <ToastContainer />
+      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl p-8 space-y-8 animate-fade-in">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-amber-600">📝 Next-Todos</h1>
+          <Link
+            href="/"
+            className="text-sm text-amber-500 hover:underline font-medium"
+          >
+            Home
+          </Link>
         </div>
-        <Link className="btn" href="/">
-          Home
-        </Link>
-      </div>
+        <p className="text-gray-600">Please add a task!</p>
 
-      <div className="container">
-        <ToastContainer />
-        <div className="wrapper">
-          <div className="form-container">
-            <div className="add-form">
-              <input
-                id="input"
-                type="text"
-                placeholder="Type your To-Do works..."
-                value={todoTitle}
-                onChange={(e) => setTodoTitle(e.target.value)}
-              />
-              <button
-                className="btn"
-                type="submit"
-                id="submit"
-                onClick={() => addTodo()}
-              >
-                ADD
-              </button>
-            </div>
-          </div>
-          <div className="head">
-            <div>Todo List</div>
-          </div>
-          <div className="pad">
-            <div id="todo">
-              <ul id="tasksContainer">
-                {userTodos.length > 0 ? (
-                  userTodos.map((todo) => (
-                    <li key={todo._id} className="task">
-                      <span className="mark">
-                        <input
-                          type="checkbox"
-                          className="checkbox"
-                          checked={todo.isComplete}
-                          value={todo.isComplete}
-                          onChange={() => changeIsComplete(todo._id)}
-                        />
-                      </span>
-                      <div className="list">
-                        <p>{todo.title}</p>
-                      </div>
-                      <span
-                        className="delete btn"
-                        onClick={() => removeTodo(todo._id)}
-                      >
-                        <FaTrash />
-                      </span>
-                    </li>
-                  ))
-                ) : (
-                  <p>No todos available</p>
-                )}
-              </ul>
-            </div>
-          </div>
+        <div className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Type your To-Do works..."
+            value={todoTitle}
+            onChange={(e) => setTodoTitle(e.target.value)}
+            className="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+          />
+          <button
+            onClick={addTodo}
+            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2 rounded-md transition"
+          >
+            ADD
+          </button>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            📋 Todo List
+          </h2>
+          <ul className="space-y-4">
+            {userTodos.length > 0 ? (
+              userTodos.map((todo) => (
+                <li
+                  key={todo._id}
+                  className="flex items-center justify-between bg-gray-50 p-4 rounded-md shadow-sm hover:shadow-md transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={todo.isComplete}
+                      onChange={() => changeIsComplete(todo._id)}
+                      className="h-5 w-5 text-amber-500 focus:ring-amber-400 border-gray-300 rounded"
+                    />
+                    <p
+                      className={`text-gray-700 ${
+                        todo.isComplete ? "line-through" : ""
+                      }`}
+                    >
+                      {todo.title}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => removeTodo(todo._id)}
+                    className="text-red-500 hover:text-red-600 transition"
+                  >
+                    <FaTrash />
+                  </button>
+                </li>
+              ))
+            ) : (
+              <p className="text-gray-500">No todos available</p>
+            )}
+          </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

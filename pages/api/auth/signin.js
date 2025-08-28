@@ -2,6 +2,7 @@ import connectToDB from "@/configs/db";
 import User from "@/models/User";
 import cookie from "cookie";
 import { generateToken, verifyPassword } from "@/utils/auth";
+import { serialize } from "cookie";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -34,7 +35,7 @@ export default async function handler(req, res) {
     // Set cookie
     res.setHeader(
       "Set-Cookie",
-      cookie.serialize("token", token, {
+      serialize("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         maxAge: 3600,
@@ -45,6 +46,7 @@ export default async function handler(req, res) {
     );
 
     // Respond with user info (excluding password)
+
     res.status(200).json({
       message: "User login successfully",
       user: {
